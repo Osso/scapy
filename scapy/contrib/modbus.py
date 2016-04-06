@@ -80,7 +80,8 @@ class ModbusPDU01ReadCoilsRequest(Packet):
 class ModbusPDU01ReadCoilsResponse(Packet):
     name = "Read Coils Response"
     fields_desc = [XByteField("funcCode", 0x01),
-                   BitFieldLenField("byteCount", None, 8, count_of="coilStatus"),
+                   BitFieldLenField(
+                       "byteCount", None, 8, count_of="coilStatus"),
                    FieldListField("coilStatus", [0x00], ByteField("", 0x00), count_from=lambda pkt: pkt.byteCount)]
 
     def extract_padding(self, s):
@@ -107,13 +108,15 @@ class ModbusPDU02ReadDiscreteInputsRequest(Packet):
 
 
 class ModbusPDU02ReadDiscreteInputsResponse(Packet):
+
     """ inputStatus: result is represented as bytes, padded with 0 to have a
         integer number of bytes. The field does not parse this result and
         present the bytes directly
     """
     name = "Read Discrete Inputs Response"
     fields_desc = [XByteField("funcCode", 0x02),
-                   BitFieldLenField("byteCount", None, 8, count_of="inputStatus"),
+                   BitFieldLenField(
+                       "byteCount", None, 8, count_of="inputStatus"),
                    FieldListField("inputStatus", [0x00], ByteField("", 0x00), count_from=lambda pkt: pkt.byteCount)]
 
 
@@ -136,7 +139,8 @@ class ModbusPDU03ReadHoldingRegistersRequest(Packet):
 class ModbusPDU03ReadHoldingRegistersResponse(Packet):
     name = "Read Holding Registers Response"
     fields_desc = [XByteField("funcCode", 0x03),
-                   BitFieldLenField("byteCount", None, 8, count_of="registerVal", adjust=lambda pkt, x: x*2),
+                   BitFieldLenField(
+                       "byteCount", None, 8, count_of="registerVal", adjust=lambda pkt, x: x*2),
                    FieldListField("registerVal", [0x0000], ShortField("", 0x0000),
                                   count_from=lambda pkt: pkt.byteCount)]
 
@@ -160,7 +164,8 @@ class ModbusPDU04ReadInputRegistersRequest(Packet):
 class ModbusPDU04ReadInputRegistersResponse(Packet):
     name = "Read Input Registers Response"
     fields_desc = [XByteField("funcCode", 0x04),
-                   BitFieldLenField("byteCount", None, 8, count_of="registerVal", adjust=lambda pkt, x: x*2),
+                   BitFieldLenField(
+                       "byteCount", None, 8, count_of="registerVal", adjust=lambda pkt, x: x*2),
                    FieldListField("registerVal", [0x0000], ShortField("", 0x0000),
                                   count_from=lambda pkt: pkt.byteCount)]
 
@@ -178,7 +183,8 @@ class ModbusPDU05WriteSingleCoilRequest(Packet):
                    XShortField("outputValue", 0x0000)]  # 0x0000 == Off, 0xFF00 == On
 
 
-class ModbusPDU05WriteSingleCoilResponse(Packet):  # The answer is the same as the request if successful
+# The answer is the same as the request if successful
+class ModbusPDU05WriteSingleCoilResponse(Packet):
     name = "Write Single Coil"
     fields_desc = [XByteField("funcCode", 0x05),
                    XShortField("outputAddr", 0x0000),  # from 0x0000 to 0xFFFF
@@ -239,7 +245,8 @@ class ModbusPDU0FWriteMultipleCoilsRequest(Packet):
     fields_desc = [XByteField("funcCode", 0x0F),
                    XShortField("startingAddr", 0x0000),
                    XShortField("quantityOutput", 0x0001),
-                   BitFieldLenField("byteCount", None, 8, count_of="outputsValue"),
+                   BitFieldLenField(
+                       "byteCount", None, 8, count_of="outputsValue"),
                    FieldListField("outputsValue", [0x00], XByteField("", 0x00), count_from=lambda pkt: pkt.byteCount)]
 
     def extract_padding(self, s):
@@ -263,8 +270,10 @@ class ModbusPDU10WriteMultipleRegistersRequest(Packet):
     name = "Write Multiple Registers"
     fields_desc = [XByteField("funcCode", 0x10),
                    XShortField("startingAddr", 0x0000),
-                   BitFieldLenField("quantityRegisters", None, 16, count_of="outputsValue",),
-                   BitFieldLenField("byteCount", None, 8, count_of="outputsValue", adjust=lambda pkt, x: x*2),
+                   BitFieldLenField(
+                       "quantityRegisters", None, 16, count_of="outputsValue",),
+                   BitFieldLenField(
+                       "byteCount", None, 8, count_of="outputsValue", adjust=lambda pkt, x: x*2),
                    FieldListField("outputsValue", [0x0000], XShortField("", 0x0000),
                                   count_from=lambda pkt: pkt.byteCount)]
 
@@ -375,7 +384,8 @@ class ModbusWriteFileSubRequest(Packet):
     fields_desc = [ByteField("refType", 0x06),
                    ShortField("fileNumber", 0x0001),
                    ShortField("recordNumber", 0x0000),
-                   BitFieldLenField("recordLength", None, 16, length_of="recordData", adjust=lambda pkt, p: p/2),
+                   BitFieldLenField(
+                       "recordLength", None, 16, length_of="recordData", adjust=lambda pkt, p: p/2),
                    FieldListField("recordData", [0x0000], ShortField("", 0x0000),
                                   length_from=lambda pkt: pkt.recordLength*2)]
 
@@ -455,8 +465,10 @@ class ModbusPDU17ReadWriteMultipleRegistersRequest(Packet):
                    XShortField("readStartingAddr", 0x0000),
                    XShortField("readQuantityRegisters", 0x0001),
                    XShortField("writeStartingAddr", 0x0000),
-                   BitFieldLenField("writeQuantityRegisters", None, 16, count_of="writeRegistersValue"),
-                   BitFieldLenField("byteCount", None, 8, count_of="writeRegistersValue", adjust=lambda pkt, x: x*2),
+                   BitFieldLenField(
+                       "writeQuantityRegisters", None, 16, count_of="writeRegistersValue"),
+                   BitFieldLenField(
+                       "byteCount", None, 8, count_of="writeRegistersValue", adjust=lambda pkt, x: x*2),
                    FieldListField("writeRegistersValue", [0x0000], XShortField("", 0x0000),
                                   count_from=lambda pkt: pkt.byteCount)]
 
@@ -464,7 +476,8 @@ class ModbusPDU17ReadWriteMultipleRegistersRequest(Packet):
 class ModbusPDU17ReadWriteMultipleRegistersResponse(Packet):
     name = "Read Write Multiple Registers Response"
     fields_desc = [XByteField("funcCode", 0x17),
-                   BitFieldLenField("byteCount", None, 8, count_of="registerVal", adjust=lambda pkt, x: x*2),
+                   BitFieldLenField(
+                       "byteCount", None, 8, count_of="registerVal", adjust=lambda pkt, x: x*2),
                    FieldListField("registerVal", [0x0000], ShortField("", 0x0000),
                                   count_from=lambda pkt: pkt.byteCount)]
 
@@ -485,7 +498,8 @@ class ModbusPDU18ReadFIFOQueueResponse(Packet):
     name = "Read FIFO Queue Response"
     fields_desc = [XByteField("funcCode", 0x18),
                    # TODO: ByteCount must includes size of FIFOCount
-                   BitFieldLenField("byteCount", None, 16, count_of="FIFOVal", adjust=lambda pkt, p: p*2+2),
+                   BitFieldLenField(
+                       "byteCount", None, 16, count_of="FIFOVal", adjust=lambda pkt, p: p*2+2),
                    BitFieldLenField("FIFOCount", None, 16, count_of="FIFOVal"),
                    FieldListField("FIFOVal", [], ShortField("", 0x0000), count_from=lambda pkt: pkt.byteCount)]
 
@@ -551,7 +565,8 @@ class ModbusPDU2B0EReadDeviceIdentificationResponse(Packet):
     fields_desc = [XByteField("funcCode", 0x2B),
                    XByteField("MEIType", 0x0E),
                    ByteEnumField("readCode", 4, _read_device_id_codes),
-                   ByteEnumField("conformityLevel", 0x01, _read_device_id_conformity_lvl),
+                   ByteEnumField(
+                       "conformityLevel", 0x01, _read_device_id_conformity_lvl),
                    ByteEnumField("more", 0x00, _read_device_id_more_follow),
                    ByteEnumField("nextObjId", 0x00, _read_device_id_object_id),
                    ByteField("objCount", 0x00)]
@@ -707,4 +722,3 @@ class ModbusADUResponse(Packet):
 
 bind_layers(TCP, ModbusADURequest, dport=502)
 bind_layers(TCP, ModbusADUResponse, sport=502)
-

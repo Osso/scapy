@@ -837,6 +837,7 @@ bind_layers(LLTDRecveeDesc, Padding)
 ########
 
 class LargeTlvBuilder(object):
+
     """An object to build content fetched through LLTDQueryLargeTlv /
     LLTDQueryLargeTlvResp packets.
 
@@ -851,6 +852,7 @@ class LargeTlvBuilder(object):
     To get the result, use .get_data()
 
     """
+
     def __init__(self):
         self.types_offsets = {}
         self.data = {}
