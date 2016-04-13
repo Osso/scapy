@@ -135,7 +135,7 @@ class TBCDByteField(StrFixedLenField):
         return val
 
     def i2repr(self, pkt, x):
-        return repr(self.i2h(pkt, x))
+        return self.i2h(pkt, x)
 
     def m2i(self, pkt, val):
         ret = []
@@ -371,6 +371,9 @@ class APNStrLenField(StrLenField):
     def i2m(self, pkt, s):
         s = "".join(map(lambda x: chr(len(x))+x, s.split(".")))
         return s
+
+    def build_python(self, pkt, x):
+        return self.i2repr(pkt, x)
 
 
 class IE_AccessPointName(IE_Base):

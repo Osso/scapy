@@ -77,8 +77,8 @@ class GTPHeader(Packet):
                    BitField("P", 1, 1),
                    BitField("T", 1, 1),
                    BitField("SPARE", 0, 1),
-                   BitField("SPARE", 0, 1),
-                   BitField("SPARE", 0, 1),
+                   BitField("SPARE2", 0, 1),
+                   BitField("SPARE3", 0, 1),
                    ByteEnumField("gtp_type", None, GTPmessageType),
                    ShortField("length", None)]
 
@@ -690,7 +690,7 @@ class IE_Bearer_QoS(gtp_v1.IE_Base):
                    BitField("SPARE", 0, 1),
                    BitField("PCI", 0, 1),
                    BitField("PriorityLevel", 0, 4),
-                   BitField("SPARE", 0, 1),
+                   BitField("SPARE2", 0, 1),
                    BitField("PVI", 0, 1),
                    ByteField("QCI", 0),
                    BitField("MaxBitRateForUplink", 0, 40),
